@@ -1,27 +1,34 @@
 {
-  "version": "0.38",
+  "version": "0.39",
   "runtime": "game.html",
-  "sha256": "17c7c94df3408c1a2660e7712e11aaa7e8837cc957922643152fff108578400e",
+  "sha256": "0039d6c27a19c2cc68b8abed145bdb2e15817f6ad83827d3bb1da936b8a35819",
   "qualified": true,
+  "sky": {
+    "style": "WHACKO SimpleOvercast",
+    "noiseSize": 512,
+    "textureSamples": 2,
+    "drawCalls": 1,
+    "triangles": 1,
+    "windUVPerSecond": [
+      0.05,
+      0.05
+    ],
+    "parallaxDepth": 2.42
+  },
+  "features": [
+    "cover and peek movement",
+    "suppression and grenade evasion",
+    "alternate doors",
+    "breachable wall bays",
+    "fuel barrel chains",
+    "throwable grenades",
+    "destructible cover"
+  ],
   "mapFamilies": [
     "Cinder Works",
     "Transfer Depot",
     "Reactor Court",
     "Dogleg Foundry"
   ],
-  "skyUnchangedFrom": "0.36",
-  "sky": {
-    "style": "WHACKO SimpleOvercast",
-    "noiseSize": 512,
-    "textureSamples": 2,
-    "parallaxDepth": 2.42
-  },
-  "features": [
-    "bounded goal planner",
-    "squad flanking",
-    "last-known-position search",
-    "inertial drone flight",
-    "four seeded map families",
-    "fresh default runs"
-  ]
+  "skyUnchangedFrom": "0.36"
 }

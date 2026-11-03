@@ -64,6 +64,11 @@ try {
   report.state.renderFailureCount = await frame.evaluate(() => __game.state.renderFailureCount);
   assert.equal(report.state.renderFailureCount, 0);
   assert.equal(report.errors.length, 0, report.errors.join('\n'));
+  report.gameplay = await frame.evaluate(() => ({version: __game.state.version, demolition: __game.state.demolition, routes: __game.state.routes}));
+  assert.equal(report.gameplay.version, '0.39');
+  assert.equal(report.gameplay.demolition.stock, 3);
+  assert.ok(report.gameplay.routes.breachBays >= 1);
+  assert.ok(report.gameplay.routes.barrels >= 1);
   report.passed = true;
   console.log(JSON.stringify(report, null, 2));
 } finally {

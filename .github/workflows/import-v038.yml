@@ -1,0 +1,53 @@
+name: Import qualified v0.38 runtime
+on:
+  push:
+    branches: [gameplay/tactics-layouts-v038]
+    paths: [.github/workflows/import-v038.yml]
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Import public runtime only
+        env:
+          RUNTIME_URL: 'https://sdmntprcentralus.oaiusercontent.com/files/00000000-30d0-81f5-be35-9c3fae735ca6/raw?se=2026-11-03T06%3A55%3A35Z&sp=r&sv=2026-02-06&sr=b&scid=d78611e4-84fe-5279-baad-35382e25eff3&skoid=de71a0d5-fb02-4fce-be69-9296aced242b&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-11-03T00%3A26%3A42Z&ske=2026-11-04T00%3A26%3A42Z&sks=b&skv=2026-02-06&sig=Cqg3WdVPzqDzPBOabvq3Icmyr5uJq8AW1/AuCZ2xGwc%3D'
+        run: |
+          curl --fail --silent --show-error --location "$RUNTIME_URL" -o /tmp/runtime.zip
+          echo '51542c86b6ae2bd44b54e859b200ecacd4bc88585dad5485a0faeae726f81a40  /tmp/runtime.zip' | sha256sum --check
+          python3 - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          import hashlib,json
+          with ZipFile('/tmp/runtime.zip') as z:
+              assert set(z.namelist())=={'SCRAPYARD_SHUTDOWN.html','release.json'}, 'Unexpected artifact content'
+              data=z.read('SCRAPYARD_SHUTDOWN.html');release=json.loads(z.read('release.json'))
+          assert release['version']=='0.38' and release['qualified']
+          assert hashlib.sha256(data).hexdigest()==release['sha256']=='17c7c94df3408c1a2660e7712e11aaa7e8837cc957922643152fff108578400e'
+          assert hashlib.sha256(Path('game.html').read_bytes()).hexdigest()=='e8068dde3c8856ff84cf112ab8add2bd39ec91c2d839b1a8164c039f24f04748','Live baseline changed'
+          Path('game.html').write_bytes(data)
+          Path('release.json').write_text(json.dumps(release,indent=2)+'\n')
+          p=Path('index.html');text=p.read_text();assert 'v0.37' in text
+          text=text.replace('v0.37','v0.38').replace('v=0.37','v=0.38').replace("set('v','0.37')","set('v','0.38')")
+          text=text.replace('New layout from the title or ending screen','New map family from the title or ending screen')
+          text=text.replace('</dl>','</dl><p>Fresh launches choose a new seeded map. N cycles to a different map family; restarting keeps the current map. The title shows its floorplan and seed. Add ?seed=42 to replay a specific layout.</p>')
+          p.write_text(text)
+          p=Path('README.md');text=p.read_text().replace('public runtime release of v0.37','public runtime release of v0.38')
+          text+='\n## v0.38: Tactical movement and four map families\n\nEnemies coordinate a pressure actor with reserved flanking positions, share observations locally, and investigate the last known position after losing sight. A small bounded goal planner and cached heap-A* navigation select and reach those positions. Existing weapon windups, locked aim, damage, cover checks and projectile behavior are retained. Friendly lanes are checked before firing.\n\nDrones accelerate, bank, brake and change altitude with swept collision and sensor compensation. This is an inertial kinematic controller, not full rotor aerodynamics. Ground steering adds acceleration, separation and bounded turning.\n\nMap families: Cinder Works, Transfer Depot, Reactor Court and Dogleg Foundry. Different room footprints and connections replace the old fixed six-room arrangement. Fresh launches randomize the seed, explicit query/hash seeds replay, N guarantees a different family, and retry keeps the current map. A title-screen floorplan makes the map visible before starting.\n\nThe approved WHACKO sky/noise and v0.37 lighting/weapon/player-feel modules are unchanged. Qualification passed the original 22 regression entry points, 29 attack/collision checks, 261-seed layout validation, planner/flight/perception tests and 54 built-in objective checks on six seeds. Rendered squad tests observed flanking, firing, banking, altitude changes, collision clearance, pause and last-known-position search. Chromium/SwiftShader evidence is not a hardware FPS claim.\n'
+          p.write_text(text)
+          p=Path('verification/live-smoke.mjs');text=p.read_text()
+          marker="  assert.equal(report.state.sky.parallaxDepth, 2.42);"
+          assert marker in text
+          text=text.replace(marker,marker+"\n  report.tactics = await frame.evaluate(() => ({version:__game.state.version, map:__game.state.level.name, family:__game.state.level.family, planner:__game.state.tactics}));\n  assert.equal(report.tactics.version, '0.38');\n  assert.equal(report.tactics.family, 1337 % 4);\n  assert.equal(report.tactics.map, 'TRANSFER DEPOT');\n  assert.equal(report.tactics.planner.navigation.queryBudget, 2);")
+          p.write_text(text)
+          PY
+      - name: Commit tested runtime and release metadata
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/import-v038.yml
+          git add game.html release.json index.html README.md verification/live-smoke.mjs
+          git commit -m 'Release v0.38: squad tactics, inertial drones and four map families'
+          git push origin HEAD:gameplay/tactics-layouts-v038

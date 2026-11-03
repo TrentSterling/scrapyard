@@ -1,7 +1,7 @@
 {
-  "version": "0.39",
+  "version": "0.40",
   "runtime": "game.html",
-  "sha256": "0039d6c27a19c2cc68b8abed145bdb2e15817f6ad83827d3bb1da936b8a35819",
+  "sha256": "400acb62595e1a1a9c932f2ac3c6dc08de3631d2ed781a6f5f46920e35f1d986",
   "qualified": true,
   "sky": {
     "style": "WHACKO SimpleOvercast",
@@ -22,7 +22,10 @@
     "breachable wall bays",
     "fuel barrel chains",
     "throwable grenades",
-    "destructible cover"
+    "destructible cover",
+    "lost-sight investigation and cover-peek transitions",
+    "evasion considers overlapping blast zones",
+    "blast physics respects intact cover"
   ],
   "mapFamilies": [
     "Cinder Works",
@@ -32,3 +35,4 @@
   ],
   "skyUnchangedFrom": "0.36"
 }
+

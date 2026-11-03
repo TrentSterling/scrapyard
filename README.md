@@ -4,7 +4,7 @@ Play at https://tront.xyz/scrapyard/ .
 
 A desktop first-person action game by Trent Sterling. Fight through a generated industrial yard, disable three breakers, then reach the shutdown terminal. Eight mixed enemy roles, finite ammunition, a charged wrench, destructible cover, and physical robot wrecks.
 
-This repository is the public runtime release of v0.39. `game.html` is self-contained and playable offline; `index.html` adds controls, version, download and credits. Open the game in a current desktop browser with WebGL enabled. Keyboard and mouse required.
+This repository is the public runtime release of v0.40. `game.html` is self-contained and playable offline; `index.html` adds controls, version, download and credits. Open the game in a current desktop browser with WebGL enabled. Keyboard and mouse required.
 
 Controls: WASD move, Shift sprint, mouse aim, left click fire, R reload, right click wrench (hold/release to charge), hold E at a breaker lever, E at the final terminal, Escape pause, N new layout from title/ending screens. Drag/arrow aiming is available if mouse lock is denied.
 
@@ -65,3 +65,10 @@ Ranged enemies use actual hide/peek pairs, short movement bounds, suppression an
 Qualification passed the original regression suite, existing attack contracts, 195 seeded layout tests, 32 authored wall-cut cases, and 36 built-in objective checks across four rendered maps. The 195 sampled seeds all retained at least two breach bays, six fuel barrels and 19 breakable cover objects; these are measured sample minima, not a claim about every possible seed. Actual browser tests verified three shots opening a usable wall breach, keyboard G, fuel detonation, full reset, pause, a guard peeking/firing from real crate cover, and a cutter reaching and hitting a stationary target.
 
 Grenades and explosion flashes use fixed four-slot pools. Sparks and physical fracture debris retain their existing caps. Added clutter and separate wall pieces cost rendering work; software-renderer correctness checks are not a hardware FPS benchmark.
+
+## v0.40: Encounter and blast fixes
+
+Enemies transition from lost-sight cover peeks into investigation rather than remaining stuck. Evasion considers overlapping blast zones when selecting a destination. Intact cover also blocks explosion impulses to physical objects, using the same pre-destruction cover state as blast damage.
+
+The final runtime passed automated qualification. Automated ordinary-encounter runs are observations, not proof that combat is fun. The blast-cover fixture and overlapping-evasion tests are focused checks rather than exhaustive gameplay proofs. Software-renderer checks do not measure native GPU performance; human playtesting remains separate.
+

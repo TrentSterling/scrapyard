@@ -1,0 +1,60 @@
+name: Import qualified breach combat runtime
+on:
+  push:
+    branches: [gameplay/breach-combat-v039]
+    paths: [.github/workflows/import-v039.yml]
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Import public runtime only
+        env:
+          RUNTIME_URL: 'https://sdmntprcentralus.oaiusercontent.com/files/00000000-09e0-81f5-8e58-2655fc9f2315/raw?se=2026-11-03T08%3A18%3A40Z&sp=r&sv=2026-02-06&sr=b&scid=5256bee4-7fe6-5ae9-b1da-2fd176caeafd&skoid=de71a0d5-fb02-4fce-be69-9296aced242b&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-11-03T00%3A40%3A23Z&ske=2026-11-04T00%3A40%3A23Z&sks=b&skv=2026-02-06&sig=09/Q0A03W99yBpM07bdazNp9ok4wet0hVdBIsyeZowY%3D'
+        run: |
+          curl --fail --silent --show-error --location "$RUNTIME_URL" -o /tmp/runtime.zip
+          echo 'b3bcd7fb87aec208c2ff3aeda6fc21edbcc08729b29987c045bedbf3901fe1f9  /tmp/runtime.zip' | sha256sum --check
+          python3 - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          import json,hashlib
+          with ZipFile('/tmp/runtime.zip') as z:
+              assert set(z.namelist())=={'SCRAPYARD_SHUTDOWN.html','release.json'}, 'Reject unexpected or private artifact content'
+              runtime=z.read('SCRAPYARD_SHUTDOWN.html')
+              release=json.loads(z.read('release.json'))
+          expected='0039d6c27a19c2cc68b8abed145bdb2e15817f6ad83827d3bb1da936b8a35819'
+          assert release['version']=='0.39' and release['qualified']
+          assert hashlib.sha256(runtime).hexdigest()==release['sha256']==expected
+          assert hashlib.sha256(Path('game.html').read_bytes()).hexdigest()=='17c7c94df3408c1a2660e7712e11aaa7e8837cc957922643152fff108578400e','Public baseline changed'
+          release['mapFamilies']=['Cinder Works','Transfer Depot','Reactor Court','Dogleg Foundry']
+          release['skyUnchangedFrom']='0.36'
+          Path('game.html').write_bytes(runtime)
+          Path('release.json').write_text(json.dumps(release,indent=2)+'\n')
+          p=Path('index.html');s=p.read_text();assert 'v0.38' in s
+          s=s.replace('v0.38','v0.39').replace('v=0.38','v=0.39').replace("set('v','0.38')","set('v','0.39')")
+          s=s.replace('<dt>Hold E</dt>','<dt>G</dt><dd>Throw a timed grenade; three to start, one restored per breaker</dd><dt>Hold E</dt>')
+          s=s.replace('<p>Ammunition is limited.','<p>Gold-marked service-wall bays can be breached. Fuel barrels explode after damage, and intact cover blocks blast damage. Grenades can hurt you too. Cargo crates and portable generators are destructible; shattered crates return four reserve rounds.</p><p>Ammunition is limited.')
+          p.write_text(s)
+          p=Path('README.md');s=p.read_text().replace('public runtime release of v0.38','public runtime release of v0.39')
+          s+='''\n## v0.39: Breach combat\n\nG throws a bouncing grenade (three initially, one restored per breaker, maximum four). Fuel barrels arm after damage and explode on a short delay; chains are queued. Intact cover blocks blast damage, including damage to the player. Crates and portable generators are destructible, and crates return four reserve rounds. Player and enemy projectiles share the cover-damage path.\n\nThe four map families now have multiple marked, destructible service-wall bays and additional open doorways where space allows. Breaking a bay removes its lower mesh, raycasts, physics and navigation obstruction while retaining the lintel. Structural borders, floors, roofs, large landmarks and objectives remain intact. These are authored destructible sections, not unrestricted runtime CSG.\n\nRanged enemies use actual hide/peek pairs, short movement bounds, suppression and grenade evasion. Ordinary bullet flinches are shorter and cannot retrigger on every gun shot; heavy hits retain stagger. Tactical stop distances now agree with the existing weapon state machines. The approved sky, lighting and player dodge are unchanged.\n\nQualification passed the original regression suite, existing attack contracts, 195 seeded layout tests, 32 authored wall-cut cases, and 36 built-in objective checks across four rendered maps. The 195 sampled seeds all retained at least two breach bays, six fuel barrels and 19 breakable cover objects; these are measured sample minima, not a claim about every possible seed. Actual browser tests verified three shots opening a usable wall breach, keyboard G, fuel detonation, full reset, pause, a guard peeking/firing from real crate cover, and a cutter reaching and hitting a stationary target.\n\nGrenades and explosion flashes use fixed four-slot pools. Sparks and physical fracture debris retain their existing caps. Added clutter and separate wall pieces cost rendering work; software-renderer correctness checks are not a hardware FPS benchmark.\n'''
+          p.write_text(s)
+          p=Path('verification/live-smoke.mjs');s=p.read_text();needle='  report.passed = true;';assert needle in s
+          extra="""  report.gameplay = await frame.evaluate(() => ({version: __game.state.version, demolition: __game.state.demolition, routes: __game.state.routes}));
+            assert.equal(report.gameplay.version, '0.39');
+            assert.equal(report.gameplay.demolition.stock, 3);
+            assert.ok(report.gameplay.routes.breachBays >= 1);
+            assert.ok(report.gameplay.routes.barrels >= 1);
+          """
+          s=s.replace(needle,extra+needle);p.write_text(s)
+          PY
+      - name: Save exact runtime and launcher
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/import-v039.yml
+          git add game.html release.json index.html README.md verification/live-smoke.mjs
+          git commit -m 'Release v0.39: breach routes, destructible cover, explosives and cover-peek combat'
+          git push origin HEAD:gameplay/breach-combat-v039

@@ -1,0 +1,14 @@
+{
+  "version": "0.34",
+  "runtime": "game.html",
+  "sha256": "c07b2a470304b4e21a78ed7081f5b679d81a9cdd5f954d59f2273fc6a91b67b5",
+  "qualified": true,
+  "qaSeeds": [
+    42,
+    1337,
+    9001
+  ],
+  "indoorPixelsUnchanged": true,
+  "skyDrawCallDelta": 1,
+  "skyTriangleDelta": 1
+}

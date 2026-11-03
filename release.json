@@ -1,7 +1,7 @@
 {
-  "version": "0.35",
+  "version": "0.36",
   "runtime": "game.html",
-  "sha256": "a4f337f67f236949953890e9d7e289eab9ddae5ca8bb01bb2a6a815523a3f416",
+  "sha256": "79a207cac55f53ba7acf9f2047ccb50eedcf0a9d505abba829fc85abab1e366a",
   "qualified": true,
   "qaSeeds": [
     42,
@@ -9,15 +9,19 @@
     9001
   ],
   "indoorPixelsUnchanged": true,
-  "drawCallDeltaFromV034": 0,
-  "triangleDeltaFromV034": 0,
+  "drawCallDeltaFromV035": 0,
+  "triangleDeltaFromV035": 0,
   "sky": {
-    "style": "sculpted-v035",
+    "style": "WHACKO SimpleOvercast",
+    "noiseSize": 512,
+    "textureSamples": 2,
     "drawCalls": 1,
     "triangles": 1,
-    "textureSamples": 4,
-    "noiseSize": 256,
-    "textureBytesWithMips": 349524,
-    "raymarchSteps": 0
+    "windUVPerSecond": [
+      0.05,
+      0.05
+    ],
+    "parallaxDepth": 2.42,
+    "noisePixelSHA256": "76f7e0b78db663183f125ec202843df10ef3d4818d773d8bb22dbb8463b5873b"
   }
 }

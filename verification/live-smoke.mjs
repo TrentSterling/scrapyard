@@ -41,6 +41,11 @@ try {
   report.state = await frame.evaluate(() => ({seed: __game.state.level.seed, sky: __game.state.sky, renderFailureCount: __game.state.renderFailureCount}));
   assert.equal(report.state.seed, 1337, 'Seed hash is forwarded');
   assert.equal(report.state.sky.enabled, true);
+  assert.equal(report.state.sky.style, release.sky.style, 'Correct shader, not just any sky');
+  assert.equal(report.state.sky.loaded, true);
+  assert.equal(report.state.sky.noiseSize, 512);
+  assert.equal(report.state.sky.textureSamples, 2);
+  assert.equal(report.state.sky.parallaxDepth, 2.42);
   await frame.evaluate(() => {
     __game.reset(); __game.resume();
     const room = __game.state.level.rooms.find(r => !r.roof);
@@ -48,6 +53,9 @@ try {
     __testDraw();
   });
   await page.screenshot({path: out + '/live-courtyard.png', timeout: 120000});
+  await frame.evaluate(() => {__game.step(.5);__testDraw();});
+  report.skyClockAfterStepping = await frame.evaluate(() => __game.state.sky.time);
+  assert.ok(report.skyClockAfterStepping >= .5, 'Deployed shader clock advances');
   report.state.renderFailureCount = await frame.evaluate(() => __game.state.renderFailureCount);
   assert.equal(report.state.renderFailureCount, 0);
   assert.equal(report.errors.length, 0, report.errors.join('\n'));

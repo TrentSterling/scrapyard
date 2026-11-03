@@ -46,6 +46,11 @@ try {
   assert.equal(report.state.sky.noiseSize, 512);
   assert.equal(report.state.sky.textureSamples, 2);
   assert.equal(report.state.sky.parallaxDepth, 2.42);
+  report.tactics = await frame.evaluate(() => ({version:__game.state.version, map:__game.state.level.name, family:__game.state.level.family, planner:__game.state.tactics}));
+  assert.equal(report.tactics.version, '0.38');
+  assert.equal(report.tactics.family, 1337 % 4);
+  assert.equal(report.tactics.map, 'TRANSFER DEPOT');
+  assert.equal(report.tactics.planner.navigation.queryBudget, 2);
   await frame.evaluate(() => {
     __game.reset(); __game.resume();
     const room = __game.state.level.rooms.find(r => !r.roof);

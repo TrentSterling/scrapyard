@@ -4,7 +4,7 @@ Play at https://tront.xyz/scrapyard/ .
 
 A desktop first-person action game by Trent Sterling. Fight through a generated industrial yard, disable three breakers, then reach the shutdown terminal. Eight mixed enemy roles, finite ammunition, a charged wrench, destructible cover, and physical robot wrecks.
 
-This repository is the public runtime release of v0.37. `game.html` is self-contained and playable offline; `index.html` adds controls, version, download and credits. Open the game in a current desktop browser with WebGL enabled. Keyboard and mouse required.
+This repository is the public runtime release of v0.38. `game.html` is self-contained and playable offline; `index.html` adds controls, version, download and credits. Open the game in a current desktop browser with WebGL enabled. Keyboard and mouse required.
 
 Controls: WASD move, Shift sprint, mouse aim, left click fire, R reload, right click wrench (hold/release to charge), hold E at a breaker lever, E at the final terminal, Escape pause, N new layout from title/ending screens. Drag/arrow aiming is available if mouse lock is denied.
 
@@ -43,3 +43,13 @@ Performance work: a capped 96-instance opaque spark pool replaces per-spark mesh
 Validation: all 22 existing regression entry points, original sky contracts, eight new lighting/movement/resource tests, 360 solid fan placements across 120 seeds, four real browser input checks, 27 objective-loop checks across three seeds, and GPU pixel isolation/reset checks. `verification/v037-qualification.json` retains the compact results.
 
 Debug comparisons: `?fx=off` disables added world lighting/fans; `?weather=off` disables cloud modulation but keeps fixed sky fill; `?weather=debug` exaggerates it. The lighting uses room/roof exposure, not accurate per-object or visible-cloud shadows.
+
+## v0.38: Tactical movement and four map families
+
+Enemies coordinate a pressure actor with reserved flanking positions, share observations locally, and investigate the last known position after losing sight. A small bounded goal planner and cached heap-A* navigation select and reach those positions. Existing weapon windups, locked aim, damage, cover checks and projectile behavior are retained. Friendly lanes are checked before firing.
+
+Drones accelerate, bank, brake and change altitude with swept collision and sensor compensation. This is an inertial kinematic controller, not full rotor aerodynamics. Ground steering adds acceleration, separation and bounded turning.
+
+Map families: Cinder Works, Transfer Depot, Reactor Court and Dogleg Foundry. Different room footprints and connections replace the old fixed six-room arrangement. Fresh launches randomize the seed, explicit query/hash seeds replay, N guarantees a different family, and retry keeps the current map. A title-screen floorplan makes the map visible before starting.
+
+The approved WHACKO sky/noise and v0.37 lighting/weapon/player-feel modules are unchanged. Qualification passed the original 22 regression entry points, 29 attack/collision checks, 261-seed layout validation, planner/flight/perception tests and 54 built-in objective checks on six seeds. Rendered squad tests observed flanking, firing, banking, altitude changes, collision clearance, pause and last-known-position search. Chromium/SwiftShader evidence is not a hardware FPS claim.

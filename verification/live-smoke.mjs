@@ -47,7 +47,7 @@ try {
   assert.equal(report.state.sky.textureSamples, 2);
   assert.equal(report.state.sky.parallaxDepth, 2.42);
   report.tactics = await frame.evaluate(() => ({version:__game.state.version, map:__game.state.level.name, family:__game.state.level.family, planner:__game.state.tactics}));
-  assert.equal(report.tactics.version, '0.38');
+  assert.equal(report.tactics.version, release.version);
   assert.equal(report.tactics.family, 1337 % 4);
   assert.equal(report.tactics.map, 'TRANSFER DEPOT');
   assert.equal(report.tactics.planner.navigation.queryBudget, 2);
@@ -65,7 +65,7 @@ try {
   assert.equal(report.state.renderFailureCount, 0);
   assert.equal(report.errors.length, 0, report.errors.join('\n'));
   report.gameplay = await frame.evaluate(() => ({version: __game.state.version, demolition: __game.state.demolition, routes: __game.state.routes}));
-  assert.equal(report.gameplay.version, '0.39');
+  assert.equal(report.gameplay.version, release.version);
   assert.equal(report.gameplay.demolition.stock, 3);
   assert.ok(report.gameplay.routes.breachBays >= 1);
   assert.ok(report.gameplay.routes.barrels >= 1);

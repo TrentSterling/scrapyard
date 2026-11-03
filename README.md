@@ -4,7 +4,7 @@ Play at https://tront.xyz/scrapyard/ .
 
 A desktop first-person action game by Trent Sterling. Fight through a generated industrial yard, disable three breakers, then reach the shutdown terminal. Eight mixed enemy roles, finite ammunition, a charged wrench, destructible cover, and physical robot wrecks.
 
-This repository is the public runtime release of v0.36. `game.html` is self-contained and playable offline; `index.html` adds controls, version, download and credits. Open the game in a current desktop browser with WebGL enabled. Keyboard and mouse required.
+This repository is the public runtime release of v0.37. `game.html` is self-contained and playable offline; `index.html` adds controls, version, download and credits. Open the game in a current desktop browser with WebGL enabled. Keyboard and mouse required.
 
 Controls: WASD move, Shift sprint, mouse aim, left click fire, R reload, right click wrench (hold/release to charge), hold E at a breaker lever, E at the final terminal, Escape pause, N new layout from title/ending screens. Drag/arrow aiming is available if mouse lock is denied.
 
@@ -31,3 +31,15 @@ Corrects v0.35, which shipped the sculpted-cloud substitute rather than the requ
 One opaque far-depth triangle, one draw call, two texture samples, no raymarch or extra lights. The game waits for the embedded PNG before becoming ready. This is a sky-only change; gameplay and yard lighting are unchanged.
 
 Verified: all 22 existing regression entry points, 27 built-in checks across three seeds, supplied-noise pixel hash, 1428 GPU/CPU comparisons of original height and Beer attenuation, visible motion over half a second, four-second in-game animation capture, pause behavior and pixel-identical covered interior. Readback maximum error was 0.001967; these are software-renderer correctness checks, not hardware FPS claims.
+
+## v0.37: Living yard and combat feedback
+
+The approved v0.36 WHACKO sky shader and noise are unchanged. Broad outdoor-only cloud-light modulation is separate from fixture lighting and emission. Two short-lived, room-clipped diffuse pulses illuminate muzzle and impact events without shadow maps or another lighting pass. Breakers dim their circuits to 22% emergency output and coast down three authored wall-fan rotors. Fans mount to validated permanent wall spans rather than doorways.
+
+Hold LMB to fire at the existing cadence. Space performs a short collision-safe directional dodge with a 1.25-second recharge; it is not invulnerability. Movement has quick acceleration and firm braking, viewmodel sway is restrained, and shots gain layered audio and a six-lobed opaque flash. Five-second kill chains, breaker points and completion ranks support local per-seed high scores. Damage and authoritative hit ordering are unchanged.
+
+Performance work: a capped 96-instance opaque spark pool replaces per-spark meshes; HUD glyphs and colors are cached and streamed to persistent buffers. The added lighting runs inside existing materials with one filtered cookie sample and two bounded pulses. In the matched idle view, fans add four visible draws and 1544 triangles (126 to 130 draws). This is not a hardware FPS claim.
+
+Validation: all 22 existing regression entry points, original sky contracts, eight new lighting/movement/resource tests, 360 solid fan placements across 120 seeds, four real browser input checks, 27 objective-loop checks across three seeds, and GPU pixel isolation/reset checks. `verification/v037-qualification.json` retains the compact results.
+
+Debug comparisons: `?fx=off` disables added world lighting/fans; `?weather=off` disables cloud modulation but keeps fixed sky fill; `?weather=debug` exaggerates it. The lighting uses room/roof exposure, not accurate per-object or visible-cloud shadows.

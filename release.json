@@ -1,27 +1,17 @@
 {
-  "version": "0.36",
+  "version": "0.37",
   "runtime": "game.html",
-  "sha256": "79a207cac55f53ba7acf9f2047ccb50eedcf0a9d505abba829fc85abab1e366a",
+  "sha256": "e8068dde3c8856ff84cf112ab8add2bd39ec91c2d839b1a8164c039f24f04748",
   "qualified": true,
-  "qaSeeds": [
-    42,
-    1337,
-    9001
-  ],
-  "indoorPixelsUnchanged": true,
-  "drawCallDeltaFromV035": 0,
-  "triangleDeltaFromV035": 0,
-  "sky": {
-    "style": "WHACKO SimpleOvercast",
-    "noiseSize": 512,
-    "textureSamples": 2,
-    "drawCalls": 1,
-    "triangles": 1,
-    "windUVPerSecond": [
-      0.05,
-      0.05
-    ],
-    "parallaxDepth": 2.42,
-    "noisePixelSHA256": "76f7e0b78db663183f125ec202843df10ef3d4818d773d8bb22dbb8463b5873b"
-  }
+  "skyUnchangedFrom": "0.36",
+  "features": [
+    "outdoor cloud light",
+    "muzzle and impact illumination",
+    "breaker circuit lighting",
+    "coasting fans",
+    "pooled sparks",
+    "held fire",
+    "collision-safe dodge",
+    "score chains"
+  ]
 }

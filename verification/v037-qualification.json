@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "runtimeSHA256": "e8068dde3c8856ff84cf112ab8add2bd39ec91c2d839b1a8164c039f24f04748",
+  "browserErrors": [],
+  "qaSeeds": [
+    42,
+    1337,
+    9001
+  ],
+  "gameplayChecks": 27,
+  "newContractTests": 8,
+  "solidFanMounts": 360,
+  "fanPlacementSeeds": 120,
+  "input": {
+    "heldFireShotsIn1_1Seconds": 4,
+    "releaseStops": true,
+    "dodge": true,
+    "pauseStops": true
+  },
+  "matchedIdleView": {
+    "off": {
+      "calls": 126,
+      "triangles": 67237
+    },
+    "on": {
+      "calls": 130,
+      "triangles": 68781
+    }
+  },
+  "gpuFixture": {
+    "cloudMotionIndoorMaxChannelDelta": 0,
+    "cloudMotionOutdoorMaxChannelDelta": 4,
+    "pulseOutsideRoomMaxChannelDelta": 0,
+    "breakerOtherRoomMaxChannelDelta": 0,
+    "resetMaxChannelDelta": 0,
+    "originalSkySamplerUnchanged": true
+  },
+  "backend": "Chromium/SwiftShader correctness checks; not hardware FPS"
+}

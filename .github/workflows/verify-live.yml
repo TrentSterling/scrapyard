@@ -1,0 +1,33 @@
+name: Verify live release
+on:
+  push:
+    branches: [main]
+    paths: [game.html, index.html, release.json, .github/workflows/verify-live.yml, verification/live-smoke.mjs]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: scrapyard-live
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser verification tools
+        run: |
+          npm install --no-save --package-lock=false playwright@1.62.1
+          npx playwright install --with-deps chromium
+      - name: Verify deployed bytes and live iframe
+        run: node verification/live-smoke.mjs
+      - name: Upload live browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scrapyard-live-evidence
+          path: live-evidence/
+          retention-days: 7

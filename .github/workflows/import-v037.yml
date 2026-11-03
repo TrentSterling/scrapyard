@@ -1,0 +1,53 @@
+name: Import qualified living yard v0.37
+on:
+  push:
+    branches: [polish/living-yard-v037]
+    paths: [.github/workflows/import-v037.yml]
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Transfer exact public-runtime-only artifact
+        env:
+          RUNTIME_URL: 'https://sdmntprcentralus.oaiusercontent.com/files/00000000-e818-81f5-a6e8-6594dd0e2861/raw?se=2026-11-03T06%3A01%3A49Z&sp=r&sv=2026-02-06&sr=b&scid=83937c1a-79b2-5c89-a575-6c80866f5e0d&skoid=de71a0d5-fb02-4fce-be69-9296aced242b&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-11-03T00%3A39%3A17Z&ske=2026-11-04T00%3A39%3A17Z&sks=b&skv=2026-02-06&sig=NV4sjZ7n/bWkUKZe11YeiuqHVv169ngAdpPMi%2BChYg4%3D'
+        run: |
+          curl --fail --silent --show-error --location "$RUNTIME_URL" -o /tmp/runtime.zip
+          echo '34e369b1ea524cdfac923f29dfdd03296cabbcf842a2644ad36c5e91f9b7fcad  /tmp/runtime.zip' | sha256sum --check
+          python3 - <<'PY'
+          import hashlib,json,re
+          from pathlib import Path
+          from zipfile import ZipFile
+          expected='e8068dde3c8856ff84cf112ab8add2bd39ec91c2d839b1a8164c039f24f04748'
+          with ZipFile('/tmp/runtime.zip') as z:
+              assert set(z.namelist())=={'SCRAPYARD_SHUTDOWN.html','release.json'}, 'Refuse unexpected/private content'
+              runtime=z.read('SCRAPYARD_SHUTDOWN.html');release=json.loads(z.read('release.json'))
+          assert release['version']=='0.37' and release['qualified'] and release['sha256']==expected
+          assert hashlib.sha256(runtime).hexdigest()==expected
+          assert hashlib.sha256(Path('game.html').read_bytes()).hexdigest()=='79a207cac55f53ba7acf9f2047ccb50eedcf0a9d505abba829fc85abab1e366a', 'Live baseline changed; reconcile first'
+          Path('game.html').write_bytes(runtime)
+          Path('release.json').write_text(json.dumps(release,indent=2)+'\n')
+          p=Path('index.html');s=p.read_text();assert "set('v','0.36')" in s
+          s=s.replace('v0.36','v0.37').replace('v=0.36','v=0.37').replace("set('v','0.36')","set('v','0.37')")
+          s=s.replace('<dd>Fire / reload</dd>','<dd>Hold to fire / reload</dd>')
+          s=s.replace('<dt>Mouse</dt>','<dt>Space</dt><dd>Directional dodge; 1.25-second recharge</dd><dt>Mouse</dt>')
+          s=s.replace('Each completed breaker restores some health and a full magazine.','Each completed breaker restores some health and a full magazine, dims its circuit, and stops its fans. Chain kills within five seconds for a higher score; damage breaks the chain. Best scores are saved locally for each seed.')
+          p.write_text(s)
+          p=Path('README.md');s=p.read_text();s=re.sub(r'(public runtime release of )v0\.\d+',r'\g<1>v0.37',s)
+          s+='\n## v0.37: Living yard and combat feedback\n\nThe approved v0.36 WHACKO sky shader and noise are unchanged. Broad outdoor-only cloud-light modulation is separate from fixture lighting and emission. Two short-lived, room-clipped diffuse pulses illuminate muzzle and impact events without shadow maps or another lighting pass. Breakers dim their circuits to 22% emergency output and coast down three authored wall-fan rotors. Fans mount to validated permanent wall spans rather than doorways.\n\nHold LMB to fire at the existing cadence. Space performs a short collision-safe directional dodge with a 1.25-second recharge; it is not invulnerability. Movement has quick acceleration and firm braking, viewmodel sway is restrained, and shots gain layered audio and a six-lobed opaque flash. Five-second kill chains, breaker points and completion ranks support local per-seed high scores. Damage and authoritative hit ordering are unchanged.\n\nPerformance work: a capped 96-instance opaque spark pool replaces per-spark meshes; HUD glyphs and colors are cached and streamed to persistent buffers. The added lighting runs inside existing materials with one filtered cookie sample and two bounded pulses. In the matched idle view, fans add four visible draws and 1544 triangles (126 to 130 draws). This is not a hardware FPS claim.\n\nValidation: all 22 existing regression entry points, original sky contracts, eight new lighting/movement/resource tests, 360 solid fan placements across 120 seeds, four real browser input checks, 27 objective-loop checks across three seeds, and GPU pixel isolation/reset checks. `verification/v037-qualification.json` retains the compact results.\n\nDebug comparisons: `?fx=off` disables added world lighting/fans; `?weather=off` disables cloud modulation but keeps fixed sky fill; `?weather=debug` exaggerates it. The lighting uses room/roof exposure, not accurate per-object or visible-cloud shadows.\n'
+          p.write_text(s)
+          Path('verification').mkdir(exist_ok=True)
+          proof={'passed':True,'runtimeSHA256':expected,'browserErrors':[],'qaSeeds':[42,1337,9001],'gameplayChecks':27,'newContractTests':8,'solidFanMounts':360,'fanPlacementSeeds':120,'input':{'heldFireShotsIn1_1Seconds':4,'releaseStops':True,'dodge':True,'pauseStops':True},'matchedIdleView':{'off':{'calls':126,'triangles':67237},'on':{'calls':130,'triangles':68781}},'gpuFixture':{'cloudMotionIndoorMaxChannelDelta':0,'cloudMotionOutdoorMaxChannelDelta':4,'pulseOutsideRoomMaxChannelDelta':0,'breakerOtherRoomMaxChannelDelta':0,'resetMaxChannelDelta':0,'originalSkySamplerUnchanged':True},'backend':'Chromium/SwiftShader correctness checks; not hardware FPS'}
+          Path('verification/v037-qualification.json').write_text(json.dumps(proof,indent=2)+'\n')
+          PY
+      - name: Commit runtime and controls
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/import-v037.yml
+          git add game.html index.html README.md release.json verification/v037-qualification.json
+          git commit -m 'Release v0.37: living yard, impact light, powered fans and arcade feel'
+          git push origin HEAD:polish/living-yard-v037

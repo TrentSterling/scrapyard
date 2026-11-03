@@ -1,7 +1,7 @@
 {
-  "version": "0.40",
+  "version": "0.41",
   "runtime": "game.html",
-  "sha256": "400acb62595e1a1a9c932f2ac3c6dc08de3631d2ed781a6f5f46920e35f1d986",
+  "sha256": "533c271a72d46eb4798a6c312c43dd98644c96f44609556b275bb1e93c2db54a",
   "qualified": true,
   "sky": {
     "style": "WHACKO SimpleOvercast",
@@ -25,7 +25,9 @@
     "destructible cover",
     "lost-sight investigation and cover-peek transitions",
     "evasion considers overlapping blast zones",
-    "blast physics respects intact cover"
+    "blast physics respects intact cover",
+    "breach bays selected against final room obstacles",
+    "clear openings ranked by local detour reduction"
   ],
   "mapFamilies": [
     "Cinder Works",
@@ -35,4 +37,3 @@
   ],
   "skyUnchangedFrom": "0.36"
 }
-

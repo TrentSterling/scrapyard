@@ -1,0 +1,187 @@
+{
+  "passed": true,
+  "errors": [],
+  "captures": {
+    "before": {
+      "render": {
+        "frame": 15,
+        "calls": 57,
+        "triangles": 56069,
+        "points": 0,
+        "lines": 0
+      },
+      "sky": {
+        "enabled": true,
+        "drawCalls": 1,
+        "triangles": 1,
+        "noiseSize": 128,
+        "textureSamples": 2,
+        "time": 0
+      },
+      "renderFailureCount": 0,
+      "graphicsLost": false
+    },
+    "after": {
+      "render": {
+        "frame": 15,
+        "calls": 57,
+        "triangles": 56069,
+        "points": 0,
+        "lines": 0
+      },
+      "sky": {
+        "enabled": true,
+        "style": "sculpted-v035",
+        "drawCalls": 1,
+        "triangles": 1,
+        "noiseSize": 256,
+        "textureSamples": 4,
+        "textureBytesWithMips": 349524,
+        "raymarchSteps": 0,
+        "time": 0
+      },
+      "renderFailureCount": 0,
+      "graphicsLost": false
+    }
+  },
+  "qa": {
+    "42": {
+      "results": [
+        {
+          "name": "reset creates eight mixed hostiles and 100 HP",
+          "pass": true
+        },
+        {
+          "name": "W moves forward",
+          "pass": true
+        },
+        {
+          "name": "pause freezes movement",
+          "pass": true
+        },
+        {
+          "name": "charged melee damages and exposes",
+          "pass": true
+        },
+        {
+          "name": "damage reduces player HP",
+          "pass": true
+        },
+        {
+          "name": "death stops play",
+          "pass": true
+        },
+        {
+          "name": "restart restores objective and enemies",
+          "pass": true
+        },
+        {
+          "name": "all breakers interact",
+          "pass": true
+        },
+        {
+          "name": "shutdown wins",
+          "pass": true
+        }
+      ],
+      "passed": true,
+      "timestamp": "2026-11-03T03:04:30.927Z"
+    },
+    "1337": {
+      "results": [
+        {
+          "name": "reset creates eight mixed hostiles and 100 HP",
+          "pass": true
+        },
+        {
+          "name": "W moves forward",
+          "pass": true
+        },
+        {
+          "name": "pause freezes movement",
+          "pass": true
+        },
+        {
+          "name": "charged melee damages and exposes",
+          "pass": true
+        },
+        {
+          "name": "damage reduces player HP",
+          "pass": true
+        },
+        {
+          "name": "death stops play",
+          "pass": true
+        },
+        {
+          "name": "restart restores objective and enemies",
+          "pass": true
+        },
+        {
+          "name": "all breakers interact",
+          "pass": true
+        },
+        {
+          "name": "shutdown wins",
+          "pass": true
+        }
+      ],
+      "passed": true,
+      "timestamp": "2026-11-03T03:04:33.596Z"
+    },
+    "9001": {
+      "results": [
+        {
+          "name": "reset creates eight mixed hostiles and 100 HP",
+          "pass": true
+        },
+        {
+          "name": "W moves forward",
+          "pass": true
+        },
+        {
+          "name": "pause freezes movement",
+          "pass": true
+        },
+        {
+          "name": "charged melee damages and exposes",
+          "pass": true
+        },
+        {
+          "name": "damage reduces player HP",
+          "pass": true
+        },
+        {
+          "name": "death stops play",
+          "pass": true
+        },
+        {
+          "name": "restart restores objective and enemies",
+          "pass": true
+        },
+        {
+          "name": "all breakers interact",
+          "pass": true
+        },
+        {
+          "name": "shutdown wins",
+          "pass": true
+        }
+      ],
+      "passed": true,
+      "timestamp": "2026-11-03T03:04:35.660Z"
+    }
+  },
+  "indoorPixelsUnchanged": true,
+  "pause": {
+    "passed": true,
+    "before": {
+      "sky": 0.26666666666666666,
+      "elapsed": 0.26666666666666666
+    },
+    "after": {
+      "sky": 0.26666666666666666,
+      "elapsed": 0.26666666666666666
+    }
+  }
+}

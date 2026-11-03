@@ -4,7 +4,7 @@ Play at https://tront.xyz/scrapyard/ .
 
 A desktop first-person action game by Trent Sterling. Fight through a generated industrial yard, disable three breakers, then reach the shutdown terminal. Eight mixed enemy roles, finite ammunition, a charged wrench, destructible cover, and physical robot wrecks.
 
-This repository is the public runtime release of v0.40. `game.html` is self-contained and playable offline; `index.html` adds controls, version, download and credits. Open the game in a current desktop browser with WebGL enabled. Keyboard and mouse required.
+This repository is the public runtime release of v0.41. `game.html` is self-contained and playable offline; `index.html` adds controls, version, download and credits. Open the game in a current desktop browser with WebGL enabled. Keyboard and mouse required.
 
 Controls: WASD move, Shift sprint, mouse aim, left click fire, R reload, right click wrench (hold/release to charge), hold E at a breaker lever, E at the final terminal, Escape pause, N new layout from title/ending screens. Drag/arrow aiming is available if mouse lock is denied.
 
@@ -71,4 +71,10 @@ Grenades and explosion flashes use fixed four-slot pools. Sparks and physical fr
 Enemies transition from lost-sight cover peeks into investigation rather than remaining stuck. Evasion considers overlapping blast zones when selecting a destination. Intact cover also blocks explosion impulses to physical objects, using the same pre-destruction cover state as blast damage.
 
 The final runtime passed automated qualification. Automated ordinary-encounter runs are observations, not proof that combat is fun. The blast-cover fixture and overlapping-evasion tests are focused checks rather than exhaustive gameplay proofs. Software-renderer checks do not measure native GPU performance; human playtesting remains separate.
+
+## v0.41: Useful breach routes
+
+Marked service bays are checked after doors, columns and props are placed. Clear openings are favored when they reduce the local detour around the wall; bays blocked by another intact wall are rejected. Scoring is deterministic and bounded, with a safe fallback when no better opening is available.
+
+Qualification includes 195 sampled seeds and 1,084 bays, independent reference-search comparisons, five controlled player crossings across all four map families, and ordinary automated hostile-contact traversal on four seeds. The grid score measures bay-side detours, not objective-route savings. Controlled crossings position the player near a bay with enemies disabled. These checks are not a human playtest, proof of enjoyable combat, or a native GPU benchmark. The approved WHACKO sky/noise, lighting, dodge and weapon feedback are unchanged.
 

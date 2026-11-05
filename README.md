@@ -4,7 +4,7 @@ Play at https://tront.xyz/scrapyard/ .
 
 A desktop first-person action game by Trent Sterling. Fight through a generated industrial yard, disable three breakers, then reach the shutdown terminal. Eight mixed enemy roles, finite ammunition, a charged wrench, destructible cover, and physical robot wrecks.
 
-This repository is the public runtime release of v0.41. `game.html` is self-contained and playable offline; `index.html` adds controls, version, download and credits. Open the game in a current desktop browser with WebGL enabled. Keyboard and mouse required.
+This repository is the public runtime release of v0.42. `game.html` is self-contained and playable offline; `index.html` adds controls, version, download and credits. Open the game in a current desktop browser with WebGL enabled. Keyboard and mouse required.
 
 Controls: WASD move, Shift sprint, mouse aim, left click fire, R reload, right click wrench (hold/release to charge), hold E at a breaker lever, E at the final terminal, Escape pause, N new layout from title/ending screens. Drag/arrow aiming is available if mouse lock is denied.
 
@@ -77,4 +77,12 @@ The final runtime passed automated qualification. Automated ordinary-encounter r
 Marked service bays are checked after doors, columns and props are placed. Clear openings are favored when they reduce the local detour around the wall; bays blocked by another intact wall are rejected. Scoring is deterministic and bounded, with a safe fallback when no better opening is available.
 
 Qualification includes 195 sampled seeds and 1,084 bays, independent reference-search comparisons, five controlled player crossings across all four map families, and ordinary automated hostile-contact traversal on four seeds. The grid score measures bay-side detours, not objective-route savings. Controlled crossings position the player near a bay with enemies disabled. These checks are not a human playtest, proof of enjoyable combat, or a native GPU benchmark. The approved WHACKO sky/noise, lighting, dodge and weapon feedback are unchanged.
+
+## v0.42: Arrival-based cover and peek timing
+
+Enemies now begin hiding and firing-window timers after reaching their cover or peek position. Slow travel no longer spends that window in advance. Arrival uses the same 0.9 m stopping distance as the ranged weapon state machines; completed shots still trigger withdrawal, while suppression and explosives retain priority.
+
+The 26-entry source regression suite passed under Node 22, alongside 29 attack/collision checks, 195-seed breach tests, 32 authored wall-cut checks, and sky, lighting and blast contracts. The new regression fails against the unchanged v0.41 policy. The approved WHACKO sky/noise, lighting, player dodge and weapon feedback remain unchanged.
+
+Ordinary rendered encounters were not rerun before this release because the available local Chromium could not launch. The existing deployed-browser smoke check runs separately after publication. Source tests and live initialization are not proof of enjoyable combat or native GPU performance. See `release.json` for the exact runtime hash, qualification limits and v0.41 rollback reference.
 

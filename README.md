@@ -4,7 +4,7 @@ Play at https://tront.xyz/scrapyard/ .
 
 A desktop first-person action game by Trent Sterling. Fight through a generated industrial yard, disable three breakers, then reach the shutdown terminal. Eight mixed enemy roles, finite ammunition, a charged wrench, destructible cover, and physical robot wrecks.
 
-This repository is the public runtime release of v0.42. `game.html` is self-contained and playable offline; `index.html` adds controls, version, download and credits. Open the game in a current desktop browser with WebGL enabled. Keyboard and mouse required.
+This repository is the public runtime release of v0.43. `game.html` is self-contained and playable offline; `index.html` adds controls, version, download and credits. Open the game in a current desktop browser with WebGL enabled. Keyboard and mouse required.
 
 Controls: WASD move, Shift sprint, mouse aim, left click fire, R reload, right click wrench (hold/release to charge), hold E at a breaker lever, E at the final terminal, Escape pause, N new layout from title/ending screens. Drag/arrow aiming is available if mouse lock is denied.
 
@@ -86,3 +86,6 @@ The 26-entry source regression suite passed under Node 22, alongside 29 attack/c
 
 Ordinary rendered encounters were not rerun before this release because the available local Chromium could not launch. The existing deployed-browser smoke check runs separately after publication. Source tests and live initialization are not proof of enjoyable combat or native GPU performance. See `release.json` for the exact runtime hash, qualification limits and v0.41 rollback reference.
 
+## v0.43
+
+Grenade danger rings stay visible throughout the fuse and pulse faster near detonation. The presentation change does not alter the blast radius, timing, physics, threat logic, damage, or audio. The source suite and ten focused grenade equivalence groups passed. In-game visual feel was not verified locally.

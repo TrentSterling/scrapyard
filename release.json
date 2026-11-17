@@ -1,7 +1,7 @@
 {
-  "version": "0.42",
+  "version": "0.43",
   "runtime": "game.html",
-  "sha256": "3b955293076fdc4cc974e5f09857083617ba5eb79f2686b2d3754b46d57bbf31",
+  "sha256": "da271ff9547c8ff226d9546695d0f936623e7f10aa73246e6e5c6890cf6cf392",
   "qualified": false,
   "sky": {
     "style": "WHACKO SimpleOvercast",
@@ -29,7 +29,8 @@
     "breach bays selected against final room obstacles",
     "clear openings ranked by local detour reduction",
     "cover and peek dwell starts at arrival",
-    "cover arrival agrees with ranged movement stop distance"
+    "cover arrival agrees with ranged movement stop distance",
+    "grenade warning rings are continuously visible and pulse faster near detonation"
   ],
   "mapFamilies": [
     "Cinder Works",
@@ -39,14 +40,14 @@
   ],
   "skyUnchangedFrom": "0.36",
   "qualification": {
-    "sourceTests": "passed",
+    "sourceTests": "26 main and 6 supplementary test entry points passed; 10 grenade equivalence groups passed",
     "ordinaryBrowserEncounters": "not rerun; local Chromium launch blocked",
     "liveSmoke": "pending deployment verification",
     "humanCombatFeel": "not verified"
   },
   "rollback": {
-    "version": "0.41",
-    "commit": "a52fbafb15355ae060928db2b874ac23207e98ff",
-    "sha256": "533c271a72d46eb4798a6c312c43dd98644c96f44609556b275bb1e93c2db54a"
+    "version": "0.42",
+    "commit": "6e5e0a8e89e1bbb3325f59f84272b19629399ade",
+    "sha256": "3b955293076fdc4cc974e5f09857083617ba5eb79f2686b2d3754b46d57bbf31"
   }
 }

@@ -1,7 +1,7 @@
 {
-  "version": "0.43",
+  "version": "0.44",
   "runtime": "game.html",
-  "sha256": "da271ff9547c8ff226d9546695d0f936623e7f10aa73246e6e5c6890cf6cf392",
+  "sha256": "9f8d73ac3b0785e949be882e1be14deff1b420e14490ad6fe4c9d848c2f1829a",
   "qualified": false,
   "sky": {
     "style": "WHACKO SimpleOvercast",
@@ -30,7 +30,8 @@
     "clear openings ranked by local detour reduction",
     "cover and peek dwell starts at arrival",
     "cover arrival agrees with ranged movement stop distance",
-    "grenade warning rings are continuously visible and pulse faster near detonation"
+    "grenade warning rings are continuously visible and pulse faster near detonation",
+    "grenade warning ring tilt is limited near the floor, with normal depth occlusion"
   ],
   "mapFamilies": [
     "Cinder Works",
@@ -40,14 +41,15 @@
   ],
   "skyUnchangedFrom": "0.36",
   "qualification": {
-    "sourceTests": "26 main and 6 supplementary test entry points passed; 10 grenade equivalence groups passed",
-    "ordinaryBrowserEncounters": "not rerun; local Chromium launch blocked",
-    "liveSmoke": "pending deployment verification",
-    "humanCombatFeel": "not verified"
+    "sourceTests": "26 main entries and scoped grenade, sky, cover, breach and AI checks passed; 54 actual Three.js scene-transform throws",
+    "physicsParity": "Exact paired trajectories, threats, damage and events persisted across tested cases",
+    "liveSmoke": "Pending exact hosted release verification",
+    "humanCombatFeel": "Not verified"
   },
   "rollback": {
-    "version": "0.42",
-    "commit": "6e5e0a8e89e1bbb3325f59f84272b19629399ade",
-    "sha256": "3b955293076fdc4cc974e5f09857083617ba5eb79f2686b2d3754b46d57bbf31"
-  }
+    "version": "0.43",
+    "commit": "e4a9b1ce1c651fccf3ccde38c49874bd0565fb10",
+    "sha256": "da271ff9547c8ff226d9546695d0f936623e7f10aa73246e6e5c6890cf6cf392"
+  },
+  "sourceCommit": "eb0bfe3b6a638040638dcf1ff367b935e7c6dd7f"
 }
